@@ -1,5 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
+import { Dimmer, Image, Loader, Segment } from 'semantic-ui-react'
 
 export default class StandaloneLayout extends React.Component {
 
@@ -31,9 +32,9 @@ export default class StandaloneLayout extends React.Component {
       <Container className='swagger-ui'>
         { Topbar ? <Topbar /> : null }
         { loadingStatus === "loading" &&
-          <div className="info">
-            <h4 className="title">Loading...</h4>
-          </div>
+          <Dimmer active={true} page>
+            <Loader>Loading</Loader>
+          </Dimmer>
         }
         { loadingStatus === "failed" &&
           <div className="info">
