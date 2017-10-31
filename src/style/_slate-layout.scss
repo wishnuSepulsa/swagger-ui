@@ -1,0 +1,16 @@
+.swagger-ui-content-container
+{
+    margin-left: 15rem;
+    min-width: 550px;
+    max-width: 1150px;
+
+    @media (min-width: 1400px) {
+    }
+    @media (min-width: 992px) {
+    }
+}
+
+h2 pre.version
+{
+    line-height: 2em;
+}
