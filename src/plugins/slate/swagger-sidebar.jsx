@@ -1,47 +1,67 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Menu } from 'semantic-ui-react'
+import { Accordion, Menu } from 'semantic-ui-react'
 
 export default class SwaggerSidebar extends React.Component {
+  state = { activeIndex: 0 }
 
   static propTypes = {
     specActions: PropTypes.object.isRequired,
-    specSelectors: PropTypes.object.isRequired,
-    oas3Selectors: PropTypes.object.isRequired,
-    oas3Actions: PropTypes.object.isRequired,
-    layoutSelectors: PropTypes.object.isRequired,
-    layoutActions: PropTypes.object.isRequired,
-    authActions: PropTypes.object.isRequired,
-    authSelectors: PropTypes.object.isRequired
+    specSelectors: PropTypes.object.isRequired
   };
+
+  handleClick = (e, titleProps) => {
+    const { index } = titleProps
+    const { activeIndex } = this.state
+    const newIndex = activeIndex === index ? -1 : index
+
+    this.setState({ activeIndex: newIndex })
+  }
 
   render() {
     let {
       specSelectors,
-      specActions,
-      oas3Selectors,
-      oas3Actions,
-      layoutSelectors,
-      layoutActions,
-      authActions,
-      authSelectors
+      specActions
     } = this.props
 
+    let taggedOps = specSelectors.taggedOperations()
+    let info = specSelectors.info()
+    const { activeIndex } = this.state
+    console.log(info.get("description"));
+    let i = 0
     return (
-      <div>
-        <Menu inverted vertical fixed='left'>
-          <Menu.Item
-            name='menu1'
-          >
-            Menu 1
-          </Menu.Item>
-          <Menu.Item
-            name='menu2'
-          >
-            Menu 2
-          </Menu.Item>
-        </Menu>
-      </div>
+        <Accordion as={Menu} inverted vertical fixed='left'>
+          {
+            taggedOps.map( (tagObj, tag) => {
+              i++
+              //const index = tagObj._map.get(k)
+              //console.log(tagObj, tag, index)
+              let operations = tagObj.get("operations")
+              return(
+                <Menu.Item>
+                  <Accordion.Title
+                    active={activeIndex === i}
+                    content={tag}
+                    index={i}
+                    onClick={this.handleClick}
+                  />
+                  <Accordion.Content active={activeIndex === i}>
+                    {
+                      operations.map( op => {
+                        const summary = op.getIn(["operation", "summary"])
+                        return(
+                          <Menu.Item>
+                          { summary }
+                          </Menu.Item>
+                        )
+                      }).toArray()
+                    }
+                  </Accordion.Content>
+                </Menu.Item>
+              )
+            }).toArray()
+          }
+        </Accordion>
     )
   }
 }

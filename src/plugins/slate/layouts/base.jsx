@@ -48,7 +48,7 @@ export default class BaseLayout extends React.Component {
     let Servers = getComponent("Servers")
     let Errors = getComponent("errors", true)
 
-    let SwaggerSidebar = getComponent("SwaggerSidebar")
+    let SwaggerSidebar = getComponent("SwaggerSidebar", true)
 
     let isLoading = specSelectors.loadingStatus() === "loading"
     let isFailed = specSelectors.loadingStatus() === "failed"
