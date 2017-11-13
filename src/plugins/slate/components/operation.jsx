@@ -3,23 +3,15 @@ import PropTypes from "prop-types"
 import { getList } from "core/utils"
 import * as CustomPropTypes from "core/proptypes"
 import { sanitizeUrl } from "core/utils"
-import { Visibility } from "semantic-ui-react";
 
 //import "less/opblock"
 
 export default class Operation extends PureComponent {
-  state = {
-    calculations: {
-      topPassed: false,
-      bottomPassed: false,
-      topVisible: false,
-      bottomVisible: false,
-    },
-  }
-
-  handleUpdate = (e, { calculations }) => {
-    console.log(calculations)
-    this.setState({ calculations })
+  constructor(props, context) {
+    super(props, context)
+    this.state = {
+      tryItOutEnabled: false
+    }
   }
 
   static propTypes = {
@@ -57,13 +49,6 @@ export default class Operation extends PureComponent {
     allowTryItOut: true,
     displayOperationId: false,
     displayRequestDuration: false
-  }
-
-  constructor(props, context) {
-    super(props, context)
-    this.state = {
-      tryItOutEnabled: false
-    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -172,14 +157,13 @@ export default class Operation extends PureComponent {
       response = response.set("notDocumented", notDocumented)
     }
 
-    let { tryItOutEnabled, calculations } = this.state
+    let { tryItOutEnabled } = this.state
     let shown = this.isShown()
     let onChangeKey = [ path, method ] // Used to add values to _this_ operation ( indexed by path and method )
 
     return (
       <div className='slate-operations-wrapper'>
         <div id={isShownKey.join("-")} className='slate-operation'>
-          <Visibility offset={[10, 10]} onUpdate={this.handleUpdate}>
           <div className='slate-operation-content'>
             <div className={'slate-heading ' + method}>
                 <h2 className='slate-operation-title'>{summary}</h2>
@@ -205,7 +189,6 @@ export default class Operation extends PureComponent {
           <div className='slate-operation-samples'>
             <SchemaSamples/>
           </div>
-          </Visibility>
         </div>
       </div>
     )
